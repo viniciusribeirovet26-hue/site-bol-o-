@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolão Copa do Mundo 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap');
+
+:root{
+  --bg:#08171c;
+  --surface:#102832;
+  --surface2:#17363f;
+  --line:#244952;
+  --green:#2fbf71;
+  --gold:#ffc53d;
+  --text:#eaf4f2;
+  --dim:#87a6ac;
+  --red:#ff6b6b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:radial-gradient(ellipse at top, #0d2129 0%, var(--bg) 60%);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  line-height:1.5;
+  min-height:100vh;
+  padding-bottom:80px;
+}
+::selection{background:var(--gold);color:#2a1c00;}
+
+/* ---------- HERO ---------- */
+.hero{
+  text-align:center;
+  padding:36px 16px 28px;
+  border-bottom:3px solid var(--gold);
+  background:linear-gradient(180deg, rgba(255,197,61,.06), transparent 70%);
+}
+.hero .eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;
+  letter-spacing:4px;
+  color:var(--green);
+  text-transform:uppercase;
+}
+.hero h1{
+  font-family:'Anton',sans-serif;
+  font-weight:400;
+  font-size:clamp(1.9rem,7vw,3.4rem);
+  letter-spacing:2px;
+  color:var(--gold);
+  text-shadow:0 0 24px rgba(255,197,61,.25);
+  margin-top:6px;
+  text-transform:uppercase;
+}
+.hero .subtitle{
+  color:var(--dim);
+  margin-top:8px;
+  font-size:.95rem;
+}
+.score-rules{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-top:22px;
+  flex-wrap:wrap;
+}
+.score-tile{
+  background:var(--surface);
+  border:2px solid var(--line);
+  border-radius:10px;
+  padding:12px 22px;
+  min-width:150px;
+}
+.score-tile .num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:2.1rem;
+  font-weight:800;
+  color:var(--green);
+  line-height:1;
+}
+.score-tile.gold .num{color:var(--gold);}
+.score-tile .label{
+  font-size:.7rem;
+  color:var(--dim);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-top:6px;
+}
+
+/* ---------- CHAMPION BANNER ---------- */
+.champion-wrap{padding:0 16px;}
+.champion-banner{
+  max-width:760px;
+  margin:18px auto 0;
+  background:linear-gradient(135deg,var(--gold),#ff9f3d);
+  color:#3a2200;
+  text-align:center;
+  padding:16px 18px;
+  border-radius:12px;
+  font-family:'Anton',sans-serif;
+  letter-spacing:1px;
+  font-size:clamp(.95rem,3.5vw,1.3rem);
+  box-shadow:0 8px 24px rgba(255,197,61,.25);
+}
+.champion-banner div{margin-top:4px;}
+
+/* ---------- NAME BAR ---------- */
+.namebar{
+  max-width:760px;
+  margin:18px auto 0;
+  padding:0 16px;
+}
+.namebar-inner{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 16px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.namebar input[type=text]{
+  flex:1;
+  min-width:160px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:8px;
+  font-size:1rem;
+  font-family:'Inter',sans-serif;
+}
+.namebar input[type=text]:focus{outline:2px solid var(--green);}
+.namebar select{
+  flex:1;
+  min-width:160px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:8px;
+  font-size:1rem;
+  font-family:'Inter',sans-serif;
+}
+.namebar select:focus{outline:2px solid var(--green);}
+.btn{
+  background:var(--green);
+  color:#06210f;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:.95rem;
+  font-family:'Inter',sans-serif;
+}
+.btn:hover{filter:brightness(1.08);}
+.btn.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--line);}
+.btn.gold{background:var(--gold);color:#3a2200;}
+.playing-as{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.85rem;
+  color:var(--dim);
+}
+.playing-as b{color:var(--gold);}
+
+/* ---------- TABS ---------- */
+.tabs{
+  display:flex;
+  gap:8px;
+  padding:20px 16px 8px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.tab-btn{
+  background:var(--surface);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:10px 20px;
+  border-radius:999px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:.9rem;
+  font-family:'Inter',sans-serif;
+}
+.tab-btn.active{background:var(--green);color:#06210f;border-color:var(--green);}
+.tab-btn:focus-visible, .btn:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+.tabpanel{display:none;max-width:980px;margin:0 auto;padding:0 16px;}
+.tabpanel.active{display:block;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ---------- MY SCORE STRIP ---------- */
+.mystrip{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 18px;
+  margin:16px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.mystrip .pts{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.6rem;
+  font-weight:800;
+  color:var(--gold);
+}
+.mystrip .pts span{font-size:.8rem;color:var(--dim);font-weight:500;}
+
+/* ---------- ACCORDION / GROUPS ---------- */
+details.group-section{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:12px;
+  overflow:hidden;
+}
+details.group-section[open] summary{border-bottom:1px solid var(--line);}
+summary{
+  cursor:pointer;
+  padding:14px 16px;
+  font-weight:700;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  list-style:none;
+  font-family:'Inter',sans-serif;
+}
+summary::-webkit-details-marker{display:none;}
+summary .meta{color:var(--dim);font-weight:500;font-size:.8rem;font-family:'JetBrains Mono',monospace;}
+summary .arrow{transition:transform .2s;color:var(--green);}
+details[open] summary .arrow{transform:rotate(90deg);}
+
+.matches-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:10px;
+  padding:12px;
+}
+
+/* ---------- MATCH CARD ---------- */
+.match-card{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.match-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;
+  color:var(--dim);
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.match-teams{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.team-name{
+  flex:1;
+  font-weight:700;
+  font-size:.88rem;
+  line-height:1.2;
+}
+.team-name.tbd{color:var(--dim);font-style:italic;font-weight:500;}
+.score-input{
+  width:48px;
+  height:48px;
+  background:#040d10;
+  border:2px solid var(--gold);
+  border-radius:6px;
+  color:var(--gold);
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.3rem;
+  text-align:center;
+  font-weight:800;
+  -moz-appearance:textfield;
+}
+.score-input::-webkit-outer-spin-button,.score-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.score-input:disabled{opacity:.25;border-color:var(--line);color:var(--dim);}
+.vs{
+  font-family:'Anton',sans-serif;
+  color:var(--dim);
+  font-size:.8rem;
+  padding:0 2px;
+}
+.match-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:.75rem;
+  color:var(--dim);
+  min-height:22px;
+}
+.points-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:800;
+  padding:3px 9px;
+  border-radius:5px;
+  font-size:.72rem;
+}
+.points-badge.p5{background:var(--gold);color:#3a2200;}
+.points-badge.p3{background:var(--green);color:#06210f;}
+.points-badge.p0{background:var(--surface2);color:var(--dim);}
+.tbd-note{color:var(--dim);font-size:.75rem;font-style:italic;}
+
+/* ---------- LEADERBOARD ---------- */
+.leaderboard-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:14px;
+  background:var(--surface);
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--line);
+}
+.leaderboard-table th, .leaderboard-table td{
+  padding:12px 10px;
+  text-align:left;
+  font-size:.85rem;
+  border-bottom:1px solid var(--line);
+}
+.leaderboard-table th{
+  background:var(--surface2);
+  text-transform:uppercase;
+  font-size:.7rem;
+  letter-spacing:1px;
+  color:var(--dim);
+}
+.leaderboard-table tr:last-child td{border-bottom:none;}
+.leaderboard-table td.pts{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:800;
+  color:var(--gold);
+  font-size:1rem;
+}
+.rank{font-family:'JetBrains Mono',monospace;font-weight:800;}
+.you-row{background:rgba(47,191,113,.08);}
+
+/* ---------- ADMIN ---------- */
+.admin-gate{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
+  text-align:center;
+  margin-top:16px;
+}
+.admin-gate input{
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:8px;
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  letter-spacing:4px;
+  width:120px;
+  margin:10px 8px;
+}
+.admin-card .ko-name-input{
+  width:100%;
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:6px 8px;
+  border-radius:6px;
+  font-size:.82rem;
+  font-family:'Inter',sans-serif;
+}
+.pen-row{display:flex;gap:8px;align-items:center;font-size:.75rem;color:var(--dim);flex-wrap:wrap;}
+.pen-row label{display:flex;align-items:center;gap:4px;cursor:pointer;}
+.save-msg{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;
+  color:var(--green);
+  min-height:18px;
+}
+
+/* ---------- RULES ---------- */
+.rules-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
+  margin:16px 0;
+}
+.rules-card h3{font-family:'Anton',sans-serif;color:var(--gold);letter-spacing:1px;margin-bottom:8px;font-size:1.1rem;text-transform:uppercase;}
+.rules-card p, .rules-card li{color:var(--text);font-size:.92rem;margin-bottom:6px;}
+.rules-card ul{padding-left:20px;margin-bottom:10px;}
+.rules-card .hl{color:var(--gold);font-weight:700;}
+.rules-card .hl2{color:var(--green);font-weight:700;}
+
+.save-bar{
+  position:sticky;
+  bottom:0;
+  left:0;
+  right:0;
+  background:var(--surface);
+  border-top:2px solid var(--gold);
+  padding:12px 16px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:14px;
+  border-radius:12px 12px 0 0;
+  z-index:50;
+}
+.save-msg.ok{color:var(--green);}
+.save-msg.err{color:var(--red);}
+
+.empty-msg{
+  text-align:center;
+  color:var(--dim);
+  padding:30px 16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.85rem;
+}
+
+footer{
+  text-align:center;
+  color:var(--dim);
+  font-size:.75rem;
+  margin-top:30px;
+  padding:0 16px;
+  font-family:'JetBrains Mono',monospace;
+}
+
+@media (max-width:480px){
+  .score-tile{min-width:120px;padding:10px 14px;}
+  .score-tile .num{font-size:1.6rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">EUA · MÉXICO · CANADÁ — 11 JUN A 19 JUL</div>
+  <h1>Bolão Copa do Mundo 2026</h1>
+  <div class="subtitle">Dê seu palpite em todos os 104 jogos e dispute com a galera</div>
+  <div class="score-rules">
+    <div class="score-tile">
+      <div class="num">3 pts</div>
+      <div class="label">Acertou o vencedor (ou empate)</div>
+    </div>
+    <div class="score-tile gold">
+      <div class="num">5 pts</div>
+      <div class="label">Acertou o placar exato</div>
+    </div>
+  </div>
+</div>
+
+<div class="champion-wrap" id="championWrap"></div>
+
+<div class="namebar">
+  <div class="namebar-inner" id="namebarInner"></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="palpites">⚽ Palpites</button>
+  <button class="tab-btn" data-tab="classificacao">🏆 Classificação</button>
+  <button class="tab-btn" data-tab="organizador">🛠️ Organizador</button>
+  <button class="tab-btn" data-tab="regras">📋 Regras</button>
+</div>
+
+<div class="tabpanel active" id="tab-palpites">
+  <div class="mystrip" id="mystrip"></div>
+  <div id="matchesContainer"></div>
+</div>
+
+<div class="tabpanel" id="tab-classificacao">
+  <div id="leaderboardContainer"></div>
+</div>
+
+<div class="tabpanel" id="tab-organizador">
+  <div id="adminContainer"></div>
+</div>
+
+<div class="tabpanel" id="tab-regras">
+  <div class="rules-card">
+    <h3>Como funciona</h3>
+    <p>Cada participante dá um palpite de placar para os <span class="hl2">104 jogos</span> da Copa do Mundo 2026 (fase de grupos + mata-mata).</p>
+    <ul>
+      <li>Acertou apenas <span class="hl2">qual time vence</span> (ou que vai empatar) → <span class="hl2">3 pontos</span>.</li>
+      <li>Acertou o <span class="hl">placar exato</span> do jogo → <span class="hl">5 pontos</span> (substitui os 3, não soma).</li>
+      <li>Errou o resultado → 0 pontos.</li>
+    </ul>
+    <p>A pontuação de todos os jogos é somada automaticamente na aba <b>Classificação</b>. O <span class="hl">campeão do bolão</span> só é definido depois do jogo da <b>Final</b>, quando todos os 104 jogos já tiverem resultado.</p>
+  </div>
+  <div class="rules-card">
+    <h3>Times de mata-mata</h3>
+    <p>Os confrontos das fases eliminatórias (Fase de 32, Oitavas, Quartas, Semis, 3º lugar e Final) começam como "A definir" porque dependem de quem se classifica na fase de grupos. O organizador atualiza os nomes dos times conforme as classificações saem, na aba <b>Organizador</b>.</p>
+  </div>
+  <div class="rules-card">
+    <h3>Sobre os dados</h3>
+    <p>Seu nome e seus palpites ficam salvos e <span class="hl2">visíveis para todo o grupo</span> (é assim que a tabela de classificação funciona). Os resultados oficiais são preenchidos pelo organizador na aba correspondente, protegida por um código simples.</p>
+  </div>
+</div>
+
+<footer>Bolão entre amigos • feito para acompanhar a Copa do Mundo 2026</footer>
+
+<script>
+/* ============================================================
+   DADOS DA COPA DO MUNDO 2026 — Grupos e jogos
+   ============================================================ */
+const GROUP_ORDER = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+const TEAMS = {
+  A: ['México','África do Sul','Coreia do Sul','República Tcheca'],
+  B: ['Canadá','Catar','Suíça','Bósnia e Herzegovina'],
+  C: ['Brasil','Marrocos','Haiti','Escócia'],
+  D: ['Estados Unidos','Paraguai','Austrália','Turquia'],
+  E: ['Alemanha','Curaçao','Costa do Marfim','Equador'],
+  F: ['Holanda','Japão','Tunísia','Suécia'],
+  G: ['Bélgica','Egito','Irã','Nova Zelândia'],
+  H: ['Espanha','Cabo Verde','Arábia Saudita','Uruguai'],
+  I: ['França','Senegal','Noruega','Iraque'],
+  J: ['Argentina','Argélia','Áustria','Jordânia'],
+  K: ['Portugal','Uzbequistão','Colômbia','RD Congo'],
+  L: ['Inglaterra','Croácia','Gana','Panamá'],
+};
+const ROUND_PAIRS = [[[0,1],[2,3]],[[0,2],[1,3]],[[0,3],[1,2]]];
+
+const KO_STAGES = [
+  {key:'R32', label:'Fase de 32 (16-avos de final)', count:16},
+  {key:'R16', label:'Oitavas de Final', count:8},
+  {key:'QF',  label:'Quartas de Final', count:4},
+  {key:'SF',  label:'Semifinais', count:2},
+  {key:'3RD', label:'Disputa pelo 3º lugar', count:1},
+  {key:'FINAL', label:'Final', count:1},
+];
+
+function buildMatches(){
+  const matches = [];
+  GROUP_ORDER.forEach(g=>{
+    const t = TEAMS[g];
+    ROUND_PAIRS.forEach((round, ri)=>{
+      round.forEach((pair, pi)=>{
+        matches.push({
+          id: `G${g}_R${ri+1}_${pi+1}`,
+          phase:'group',
+          group:g,
+          stageLabel:`Grupo ${g} · Rodada ${ri+1}`,
+          a: t[pair[0]],
+          b: t[pair[1]],
+        });
+      });
+    });
+  });
+  KO_STAGES.forEach(stage=>{
+    for(let i=1;i<=stage.count;i++){
+      matches.push({
+        id: stage.count===1 ? stage.key : `${stage.key}_${i}`,
+        phase:'ko',
+        group:stage.key,
+        stageLabel: stage.count===1 ? stage.label : `${stage.label} ${i}`,
+        a:null,
+        b:null,
+      });
+    }
+  });
+  return matches;
+}
+const MATCHES = buildMatches();
+const MATCH_BY_ID = {};
+MATCHES.forEach(m=>MATCH_BY_ID[m.id]=m);
+
+const PLAYERS = [
+  'Davi','Luiz Paixão','Bernardo','João','Felipe','Enthony',
+  'Pedro Lucas','Alexandre','Rubens','Luiz Gustavo','Marquim','Vinicius','Matheus'
+];
+
+/* ============================================================
+   STORAGE HELPERS
+   ============================================================ */
+async function storeGet(key, shared){
+  try{
+    const r = await window.storage.get(key, shared);
+    return r ? JSON.parse(r.value) : null;
+  }catch(e){ return null; }
+}
+async function storeSet(key, value, shared){
+  try{
+    await window.storage.set(key, JSON.stringify(value), shared);
+    return true;
+  }catch(e){ return false; }
+}
+async function storeListPrefix(prefix, shared){
+  try{
+    const r = await window.storage.list(prefix, shared);
+    return (r && r.keys) ? r.keys : [];
+  }catch(e){ return []; }
+}
+function slugify(name){
+  return name.trim().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,40) || 'jogador';
+}
+
+/* ============================================================
+   APP STATE
+   ============================================================ */
+let currentName = null;     // display name
+let currentSlug = null;     // storage-safe key
+let myPicks = {};            // {matchId: {a,b}}
+let results = {};             // {matchId: {a,b,pen}}
+let bracketTeams = {};        // {matchId: {a,b}}
+let isAdmin = false;
+const ADMIN_PIN = '2026';
+let editingPlayerName = null;
+let editingPlayerSlug = null;
+let editingPicks = {};
+
+const tabPalpites = document.getElementById('tab-palpites');
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+async function boot(){
+  results = (await storeGet('results', true)) || {};
+  bracketTeams = (await storeGet('bracket_teams', true)) || {};
+
+  const savedName = await storeGet('my_name', false);
+  if(savedName && savedName.name){
+    currentName = savedName.name;
+    currentSlug = slugify(currentName);
+    const picks = await storeGet(`bets_${currentSlug}`, true);
+    myPicks = (picks && picks.picks) || {};
+  }
+
+  renderNamebar();
+  renderChampionBanner();
+  renderMatches();
+  renderMystrip();
+  renderLeaderboard();
+  renderAdmin();
+}
+
+/* ============================================================
+   NAME BAR
+   ============================================================ */
+function renderNamebar(){
+  const el = document.getElementById('namebarInner');
+  if(currentName){
+    el.innerHTML = `
+      <span class="playing-as">Jogando como <b>${escapeHtml(currentName)}</b></span>
+      <button class="btn secondary" id="switchUserBtn" type="button">Trocar jogador</button>
+    `;
+    document.getElementById('switchUserBtn').onclick = ()=>{
+      currentName = null; currentSlug = null; myPicks = {};
+      renderNamebar(); renderMystrip(); renderMatches();
+    };
+  }else{
+    const options = PLAYERS.map(p=>`<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+    el.innerHTML = `
+      <select id="nameSelect">
+        <option value="">Selecione seu nome</option>
+        ${options}
+      </select>
+      <button class="btn" id="enterBtn" type="button">Entrar no bolão</button>
+    `;
+    const select = document.getElementById('nameSelect');
+
+    const go = async ()=>{
+      const val = select.value;
+      if(!val) return;
+      currentName = val;
+      currentSlug = slugify(val);
+      await storeSet('my_name', {name: currentName}, false);
+      const existing = await storeGet(`bets_${currentSlug}`, true);
+      myPicks = (existing && existing.picks) || {};
+      if(!existing){
+        await storeSet(`bets_${currentSlug}`, {name: currentName, picks: {}}, true);
+      }
+      renderNamebar();
+      renderMatches();
+      renderMystrip();
+      renderLeaderboard();
+    };
+    document.getElementById('enterBtn').onclick = go;
+  }
+}
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function outcome(a,b){ if(a>b) return 'A'; if(b>a) return 'B'; return 'D'; }
+function calcPoints(pred, res){
+  if(!pred || res==null || res.a==null || res.b==null) return null;
+  if(pred.a==null || pred.b==null || pred.a==='' || pred.b==='') return null;
+  const pa = Number(pred.a), pb = Number(pred.b);
+  if(pa===res.a && pb===res.b) return 5;
+  if(outcome(pa,pb) === outcome(res.a,res.b)) return 3;
+  return 0;
+}
+
+/* ============================================================
+   RENDER: PALPITES (jogos)
+   ============================================================ */
+function teamLabel(m, side){
+  if(m.phase==='group') return m[side];
+  const bt = bracketTeams[m.id];
+  const val = bt ? bt[side] : null;
+  return val && val.trim() ? val : 'A definir';
+}
+
+function renderMatches(){
+  const container = document.getElementById('matchesContainer');
+  if(!currentName){
+    container.innerHTML = `<div class="empty-msg">Digite seu nome acima para começar a dar palpites ⚽</div>`;
+    return;
+  }
+
+  let html = '';
+
+  // Group sections
+  GROUP_ORDER.forEach(g=>{
+    const teams = TEAMS[g];
+    const groupMatches = MATCHES.filter(m=>m.phase==='group' && m.group===g);
+    html += `<details class="group-section">
+      <summary><span>Grupo ${g} — ${teams.join(', ')}</span><span class="meta">${groupMatches.length} jogos <span class="arrow">▶</span></span></summary>
+      <div class="matches-grid">`;
+    groupMatches.forEach(m=> html += matchCardHtml(m));
+    html += `</div></details>`;
+  });
+
+  // Knockout sections
+  KO_STAGES.forEach(stage=>{
+    const stageMatches = MATCHES.filter(m=>m.phase==='ko' && m.group===stage.key);
+    html += `<details class="group-section">
+      <summary><span>${stage.label}</span><span class="meta">${stageMatches.length} jogo${stageMatches.length>1?'s':''} <span class="arrow">▶</span></span></summary>
+      <div class="matches-grid">`;
+    stageMatches.forEach(m=> html += matchCardHtml(m));
+    html += `</div></details>`;
+  });
+
+  html += `<div class="save-bar">
+    <button class="btn gold" id="savePicksBtn" type="button">💾 Salvar meus palpites</button>
+    <span class="save-msg" id="picksSaveMsg"></span>
+  </div>`;
+
+  container.innerHTML = html;
+
+  // wire up inputs (local update only, no auto-save)
+  MATCHES.forEach(m=>{
+    const inputA = document.getElementById(`pick_${m.id}_a`);
+    const inputB = document.getElementById(`pick_${m.id}_b`);
+    if(!inputA || !inputB) return;
+    [inputA, inputB].forEach(inp=>{
+      inp.addEventListener('input', ()=> updateLocalPick(m.id, inputA.value, inputB.value));
+    });
+  });
+
+  const saveBtn = document.getElementById('savePicksBtn');
+  if(saveBtn) saveBtn.onclick = savePicks;
+}
+
+function matchCardHtml(m){
+  const labelA = teamLabel(m,'a');
+  const labelB = teamLabel(m,'b');
+  const tbd = (m.phase==='ko') && (labelA==='A definir' || labelB==='A definir');
+  const pick = myPicks[m.id] || {};
+  const res = results[m.id];
+  const pts = calcPoints(pick, res);
+
+  let footer = '';
+  if(res && res.a!=null && res.b!=null){
+    let resultStr = `Resultado: ${res.a} x ${res.b}`;
+    if(res.pen){
+      const winner = res.pen==='A' ? labelA : labelB;
+      resultStr += ` (pên: ${escapeHtml(winner)})`;
+    }
+    let badge = '<span class="points-badge p0">Sem palpite</span>';
+    if(pts===5) badge = '<span class="points-badge p5">+5 pts ★</span>';
+    else if(pts===3) badge = '<span class="points-badge p3">+3 pts</span>';
+    else if(pts===0) badge = '<span class="points-badge p0">0 pts</span>';
+    footer = `<div class="match-footer"><span>${resultStr}</span>${badge}</div>`;
+  }else if(tbd){
+    footer = `<div class="match-footer"><span class="tbd-note">Aguardando definição dos times</span></div>`;
+  }else{
+    footer = `<div class="match-footer"><span>Aguardando o jogo</span></div>`;
+  }
+
+  return `
+    <div class="match-card">
+      <div class="match-tag">${escapeHtml(m.stageLabel)}</div>
+      <div class="match-teams">
+        <div class="team-name ${labelA==='A definir'?'tbd':''}">${escapeHtml(labelA)}</div>
+        <input type="number" min="0" max="20" class="score-input" id="pick_${m.id}_a"
+          value="${pick.a!=null?pick.a:''}" ${tbd?'disabled':''} aria-label="Placar ${escapeHtml(labelA)}">
+        <span class="vs">×</span>
+        <input type="number" min="0" max="20" class="score-input" id="pick_${m.id}_b"
+          value="${pick.b!=null?pick.b:''}" ${tbd?'disabled':''} aria-label="Placar ${escapeHtml(labelB)}">
+        <div class="team-name ${labelB==='A definir'?'tbd':''}" style="text-align:right">${escapeHtml(labelB)}</div>
+      </div>
+      ${footer}
+    </div>`;
+}
+
+function updateLocalPick(matchId, a, b){
+  myPicks[matchId] = {
+    a: a===''?null:Number(a),
+    b: b===''?null:Number(b),
+  };
+  const msg = document.getElementById('picksSaveMsg');
+  if(msg){ msg.textContent = 'Alterações não salvas — clique em Salvar'; msg.className='save-msg'; }
+}
+
+async function savePicks(){
+  if(!currentName || !currentSlug) return;
+  const msg = document.getElementById('picksSaveMsg');
+  const btn = document.getElementById('savePicksBtn');
+  if(btn) btn.disabled = true;
+  if(msg){ msg.textContent = 'Salvando…'; msg.className='save-msg'; }
+  const ok = await storeSet(`bets_${currentSlug}`, {name: currentName, picks: myPicks}, true);
+  if(btn) btn.disabled = false;
+  if(msg){
+    msg.textContent = ok ? 'Palpites salvos ✓' : 'Erro ao salvar, tente novamente';
+    msg.className = ok ? 'save-msg ok' : 'save-msg err';
+  }
+  renderMystrip();
+  renderLeaderboard();
+}
+
+/* ============================================================
+   MY SCORE STRIP
+   ============================================================ */
+function renderMystrip(){
+  const el = document.getElementById('mystrip');
+  if(!currentName){ el.innerHTML=''; return; }
+  let total=0, exact=0, hits=0, played=0;
+  MATCHES.forEach(m=>{
+    const res = results[m.id];
+    if(!res || res.a==null) return;
+    played++;
+    const pts = calcPoints(myPicks[m.id], res);
+    if(pts!=null){
+      total += pts;
+      if(pts===5){exact++; hits++;}
+      else if(pts===3) hits++;
+    }
+  });
+  el.innerHTML = `
+    <div>
+      <div class="pts">${total} pts <span>até agora</span></div>
+      <div style="color:var(--dim);font-size:.8rem;margin-top:2px;">${hits} acerto(s) de resultado · ${exact} placar(es) exato(s) · ${played} jogo(s) já com resultado de ${MATCHES.length}</div>
+    </div>`;
+}
+
+/* ============================================================
+   LEADERBOARD
+   ============================================================ */
+async function renderLeaderboard(){
+  const container = document.getElementById('leaderboardContainer');
+  container.innerHTML = `<div class="empty-msg">Carregando classificação…</div>`;
+
+  const keys = await storeListPrefix('bets_', true);
+  if(!keys.length){
+    container.innerHTML = `<div class="empty-msg">Ainda ninguém deu palpites. Seja o primeiro na aba Palpites!</div>`;
+    return;
+  }
+
+  const rows = [];
+  for(const key of keys){
+    const data = await storeGet(key, true);
+    if(!data) continue;
+    const picks = data.picks || {};
+    let total=0, exact=0, hits=0;
+    MATCHES.forEach(m=>{
+      const res = results[m.id];
+      if(!res || res.a==null) return;
+      const pts = calcPoints(picks[m.id], res);
+      if(pts!=null){
+        total += pts;
+        if(pts===5){exact++; hits++;}
+        else if(pts===3) hits++;
+      }
+    });
+    rows.push({name: data.name || key, total, exact, hits});
+  }
+
+  rows.sort((x,y)=> y.total - x.total || y.exact - x.exact);
+
+  const medals = ['🥇','🥈','🥉'];
+  let html = `<table class="leaderboard-table"><thead><tr>
+    <th>#</th><th>Jogador</th><th>Pontos</th><th>Placares exatos</th><th>Resultados certos</th>
+  </tr></thead><tbody>`;
+  rows.forEach((r,i)=>{
+    const youClass = (currentName && slugify(r.name)===currentSlug) ? 'you-row' : '';
+    const rankDisplay = medals[i] || (i+1);
+    html += `<tr class="${youClass}">
+      <td class="rank">${rankDisplay}</td>
+      <td>${escapeHtml(r.name)}</td>
+      <td class="pts">${r.total}</td>
+      <td>${r.exact}</td>
+      <td>${r.hits}</td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+
+  const allDone = MATCHES.every(m => results[m.id] && results[m.id].a!=null);
+  if(allDone && rows.length){
+    html = `<div class="champion-banner" style="margin:0 0 14px 0;">🏆 CAMPEÃO DO BOLÃO: ${escapeHtml(rows[0].name)} com ${rows[0].total} pontos!</div>` + html;
+  }
+
+  container.innerHTML = html;
+}
+
+/* ============================================================
+   CHAMPION BANNER (Cup champion)
+   ============================================================ */
+function renderChampionBanner(){
+  const el = document.getElementById('championWrap');
+  const finalRes = results['FINAL'];
+  if(finalRes && finalRes.a!=null && finalRes.b!=null){
+    const m = MATCH_BY_ID['FINAL'];
+    const labelA = teamLabel(m,'a');
+    const labelB = teamLabel(m,'b');
+    let champ;
+    if(finalRes.a > finalRes.b) champ = labelA;
+    else if(finalRes.b > finalRes.a) champ = labelB;
+    else champ = finalRes.pen==='A' ? labelA : (finalRes.pen==='B' ? labelB : null);
+    if(champ){
+      el.innerHTML = `<div class="champion-banner">🏆 CAMPEÃO DA COPA DO MUNDO 2026: ${escapeHtml(champ)}</div>`;
+      return;
+    }
+  }
+  el.innerHTML = '';
+}
+
+/* ============================================================
+   ADMIN / ORGANIZADOR
+   ============================================================ */
+function renderAdmin(){
+  const container = document.getElementById('adminContainer');
+  if(!isAdmin){
+    container.innerHTML = `
+      <div class="admin-gate">
+        <p>Esta área é só para quem organiza o bolão: aqui você lança os resultados oficiais e, mais pra frente, define os times do mata-mata.</p>
+        <div>
+          <input type="text" id="pinInput" placeholder="código" maxlength="10">
+          <button class="btn gold" id="pinBtn" type="button">Liberar</button>
+        </div>
+        <p style="color:var(--dim);font-size:.8rem;margin-top:8px;">Combine o código com o grupo (padrão: 2026).</p>
+      </div>`;
+    document.getElementById('pinBtn').onclick = ()=>{
+      const val = document.getElementById('pinInput').value.trim();
+      if(val === ADMIN_PIN){ isAdmin = true; renderAdmin(); }
+      else { document.getElementById('pinInput').value=''; document.getElementById('pinInput').placeholder='código incorreto'; }
+    };
+    return;
+  }
+
+  let html = `<div class="rules-card"><h3>Resultados oficiais</h3>
+    <p style="color:var(--dim);font-size:.85rem;">Preencha o placar real de cada jogo assim que terminar. Para o mata-mata, defina primeiro os nomes dos times e, em caso de empate, marque o vencedor nos pênaltis.</p></div>`;
+
+  html += `<div class="rules-card">
+    <h3>Palpites dos jogadores</h3>
+    <p style="color:var(--dim);font-size:.85rem;">Veja os palpites de qualquer jogador e corrija se precisar.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px;">
+      <select id="adminPlayerSelect">
+        <option value="">Selecione um jogador</option>
+        ${PLAYERS.map(p=>`<option value="${escapeHtml(p)}" ${p===editingPlayerName?'selected':''}>${escapeHtml(p)}</option>`).join('')}
+      </select>
+      <button class="btn secondary" id="loadPlayerPicksBtn" type="button">Carregar palpites</button>
+    </div>
+    <div id="playerPicksEditor"></div>
+  </div>`;
+
+  GROUP_ORDER.forEach(g=>{
+    const groupMatches = MATCHES.filter(m=>m.phase==='group' && m.group===g);
+    html += `<details class="group-section"><summary><span>Grupo ${g}</span><span class="meta">${groupMatches.length} jogos <span class="arrow">▶</span></span></summary><div class="matches-grid">`;
+    groupMatches.forEach(m=> html += adminCardHtml(m));
+    html += `</div></details>`;
+  });
+
+  KO_STAGES.forEach(stage=>{
+    const stageMatches = MATCHES.filter(m=>m.phase==='ko' && m.group===stage.key);
+    html += `<details class="group-section"><summary><span>${stage.label}</span><span class="meta">${stageMatches.length} jogo${stageMatches.length>1?'s':''} <span class="arrow">▶</span></span></summary><div class="matches-grid">`;
+    stageMatches.forEach(m=> html += adminCardHtml(m));
+    html += `</div></details>`;
+  });
+
+  html += `<div class="save-bar">
+    <button class="btn gold" id="saveResultsBtn" type="button">💾 Salvar resultados e times</button>
+    <span class="save-msg" id="adminSaveMsg2"></span>
+  </div>`;
+
+  container.innerHTML = html;
+
+  MATCHES.forEach(m=>{
+    if(m.phase==='ko'){
+      const ia = document.getElementById(`ko_${m.id}_a`);
+      const ib = document.getElementById(`ko_${m.id}_b`);
+      if(ia && ib){
+        [ia,ib].forEach(inp=> inp.addEventListener('input', ()=> updateLocalBracket(m.id, ia.value, ib.value)));
+      }
+    }
+    const ra = document.getElementById(`res_${m.id}_a`);
+    const rb = document.getElementById(`res_${m.id}_b`);
+    if(ra && rb){
+      [ra,rb].forEach(inp=> inp.addEventListener('input', ()=> updateLocalResult(m, ra.value, rb.value)));
+    }
+    const penRadios = document.querySelectorAll(`input[name="pen_${m.id}"]`);
+    penRadios.forEach(r=> r.addEventListener('change', ()=> updateLocalResult(m, ra.value, rb.value)));
+  });
+
+  const saveBtn = document.getElementById('saveResultsBtn');
+  if(saveBtn) saveBtn.onclick = saveAdminData;
+
+  const loadBtn = document.getElementById('loadPlayerPicksBtn');
+  if(loadBtn) loadBtn.onclick = loadPlayerPicks;
+  if(editingPlayerSlug) renderPlayerPicksEditor();
+}
+
+function adminCardHtml(m){
+  const labelA = teamLabel(m,'a');
+  const labelB = teamLabel(m,'b');
+  const res = results[m.id] || {};
+  let koInputs = '';
+  if(m.phase==='ko'){
+    const bt = bracketTeams[m.id] || {};
+    koInputs = `
+      <input type="text" class="ko-name-input" id="ko_${m.id}_a" placeholder="Time A" value="${escapeHtml(bt.a||'')}">
+      <input type="text" class="ko-name-input" id="ko_${m.id}_b" placeholder="Time B" value="${escapeHtml(bt.b||'')}">
+    `;
+  }
+  let penRow = '';
+  if(m.phase==='ko'){
+    penRow = `<div class="pen-row">
+      <span>Se empate, vencedor nos pênaltis:</span>
+      <label><input type="radio" name="pen_${m.id}" value="A" ${res.pen==='A'?'checked':''}> ${escapeHtml(labelA)}</label>
+      <label><input type="radio" name="pen_${m.id}" value="B" ${res.pen==='B'?'checked':''}> ${escapeHtml(labelB)}</label>
+    </div>`;
+  }
+  return `
+    <div class="match-card admin-card">
+      <div class="match-tag">${escapeHtml(m.stageLabel)}</div>
+      ${koInputs}
+      <div class="match-teams">
+        <div class="team-name">${escapeHtml(labelA)}</div>
+        <input type="number" min="0" max="30" class="score-input" id="res_${m.id}_a" value="${res.a!=null?res.a:''}">
+        <span class="vs">×</span>
+        <input type="number" min="0" max="30" class="score-input" id="res_${m.id}_b" value="${res.b!=null?res.b:''}">
+        <div class="team-name" style="text-align:right">${escapeHtml(labelB)}</div>
+      </div>
+      ${penRow}
+    </div>`;
+}
+
+function updateLocalResult(m, aVal, bVal){
+  let pen = null;
+  const checked = document.querySelector(`input[name="pen_${m.id}"]:checked`);
+  if(checked) pen = checked.value;
+
+  if(aVal==='' && bVal===''){
+    delete results[m.id];
+  }else{
+    results[m.id] = {
+      a: aVal===''?null:Number(aVal),
+      b: bVal===''?null:Number(bVal),
+      pen: pen,
+    };
+  }
+  const msg = document.getElementById('adminSaveMsg2');
+  if(msg){ msg.textContent = 'Alterações não salvas — clique em Salvar'; msg.className='save-msg'; }
+}
+
+function updateLocalBracket(matchId, a, b){
+  bracketTeams[matchId] = {a: a.trim(), b: b.trim()};
+  const msg = document.getElementById('adminSaveMsg2');
+  if(msg){ msg.textContent = 'Alterações não salvas — clique em Salvar'; msg.className='save-msg'; }
+}
+
+async function saveAdminData(){
+  const msg = document.getElementById('adminSaveMsg2');
+  const btn = document.getElementById('saveResultsBtn');
+  if(btn) btn.disabled = true;
+  if(msg){ msg.textContent = 'Salvando…'; msg.className='save-msg'; }
+  const ok1 = await storeSet('results', results, true);
+  const ok2 = await storeSet('bracket_teams', bracketTeams, true);
+  if(btn) btn.disabled = false;
+  const ok = ok1 && ok2;
+  if(msg){
+    msg.textContent = ok ? 'Resultados e times salvos ✓' : 'Erro ao salvar, tente novamente';
+    msg.className = ok ? 'save-msg ok' : 'save-msg err';
+  }
+  renderChampionBanner();
+  renderMatches();
+  renderMystrip();
+  renderLeaderboard();
+}
+
+/* ---------- Admin: view/edit a player's picks ---------- */
+async function loadPlayerPicks(){
+  const select = document.getElementById('adminPlayerSelect');
+  const name = select.value;
+  if(!name) return;
+  editingPlayerName = name;
+  editingPlayerSlug = slugify(name);
+  const data = await storeGet(`bets_${editingPlayerSlug}`, true);
+  editingPicks = (data && data.picks) ? JSON.parse(JSON.stringify(data.picks)) : {};
+  renderPlayerPicksEditor();
+}
+
+function renderPlayerPicksEditor(){
+  const el = document.getElementById('playerPicksEditor');
+  if(!el) return;
+  if(!editingPlayerSlug){ el.innerHTML=''; return; }
+
+  let html = `<div style="margin-top:10px;">`;
+  GROUP_ORDER.forEach(g=>{
+    const teams = TEAMS[g];
+    const groupMatches = MATCHES.filter(m=>m.phase==='group' && m.group===g);
+    html += `<details class="group-section"><summary><span>Grupo ${g} — ${teams.join(', ')}</span><span class="meta">${groupMatches.length} jogos <span class="arrow">▶</span></span></summary><div class="matches-grid">`;
+    groupMatches.forEach(m=> html += playerPickCardHtml(m));
+    html += `</div></details>`;
+  });
+  KO_STAGES.forEach(stage=>{
+    const stageMatches = MATCHES.filter(m=>m.phase==='ko' && m.group===stage.key);
+    html += `<details class="group-section"><summary><span>${stage.label}</span><span class="meta">${stageMatches.length} jogo${stageMatches.length>1?'s':''} <span class="arrow">▶</span></span></summary><div class="matches-grid">`;
+    stageMatches.forEach(m=> html += playerPickCardHtml(m));
+    html += `</div></details>`;
+  });
+  html += `<div class="save-bar">
+    <button class="btn gold" id="savePlayerPicksBtn" type="button">💾 Salvar palpites de ${escapeHtml(editingPlayerName)}</button>
+    <span class="save-msg" id="playerPicksSaveMsg"></span>
+  </div></div>`;
+
+  el.innerHTML = html;
+
+  MATCHES.forEach(m=>{
+    const ia = document.getElementById(`apick_${m.id}_a`);
+    const ib = document.getElementById(`apick_${m.id}_b`);
+    if(!ia||!ib) return;
+    [ia,ib].forEach(inp=> inp.addEventListener('input', ()=>{
+      editingPicks[m.id] = {
+        a: ia.value===''?null:Number(ia.value),
+        b: ib.value===''?null:Number(ib.value),
+      };
+      const msg = document.getElementById('playerPicksSaveMsg');
+      if(msg){ msg.textContent = 'Alterações não salvas — clique em Salvar'; msg.className = 'save-msg'; }
+    }));
+  });
+
+  const saveBtn = document.getElementById('savePlayerPicksBtn');
+  if(saveBtn) saveBtn.onclick = savePlayerPicks;
+}
+
+function playerPickCardHtml(m){
+  const labelA = teamLabel(m,'a');
+  const labelB = teamLabel(m,'b');
+  const tbd = (m.phase==='ko') && (labelA==='A definir' || labelB==='A definir');
+  const pick = editingPicks[m.id] || {};
+  const res = results[m.id];
+  const pts = calcPoints(pick, res);
+
+  let badge = '';
+  if(res && res.a!=null && res.b!=null){
+    if(pts===5) badge = '<span class="points-badge p5">+5 pts ★</span>';
+    else if(pts===3) badge = '<span class="points-badge p3">+3 pts</span>';
+    else if(pts===0) badge = '<span class="points-badge p0">0 pts</span>';
+    badge = `<div class="match-footer"><span>Resultado: ${res.a} x ${res.b}</span>${badge}</div>`;
+  }else if(tbd){
+    badge = `<div class="match-footer"><span class="tbd-note">Aguardando definição dos times</span></div>`;
+  }
+
+  return `
+    <div class="match-card">
+      <div class="match-tag">${escapeHtml(m.stageLabel)}</div>
+      <div class="match-teams">
+        <div class="team-name ${labelA==='A definir'?'tbd':''}">${escapeHtml(labelA)}</div>
+        <input type="number" min="0" max="20" class="score-input" id="apick_${m.id}_a"
+          value="${pick.a!=null?pick.a:''}" ${tbd?'disabled':''} aria-label="Placar ${escapeHtml(labelA)}">
+        <span class="vs">×</span>
+        <input type="number" min="0" max="20" class="score-input" id="apick_${m.id}_b"
+          value="${pick.b!=null?pick.b:''}" ${tbd?'disabled':''} aria-label="Placar ${escapeHtml(labelB)}">
+        <div class="team-name ${labelB==='A definir'?'tbd':''}" style="text-align:right">${escapeHtml(labelB)}</div>
+      </div>
+      ${badge}
+    </div>`;
+}
+
+async function savePlayerPicks(){
+  if(!editingPlayerSlug) return;
+  const msg = document.getElementById('playerPicksSaveMsg');
+  const btn = document.getElementById('savePlayerPicksBtn');
+  if(btn) btn.disabled = true;
+  if(msg){ msg.textContent = 'Salvando…'; msg.className = 'save-msg'; }
+  const ok = await storeSet(`bets_${editingPlayerSlug}`, {name: editingPlayerName, picks: editingPicks}, true);
+  if(btn) btn.disabled = false;
+  if(msg){
+    msg.textContent = ok ? 'Palpites salvos ✓' : 'Erro ao salvar, tente novamente';
+    msg.className = ok ? 'save-msg ok' : 'save-msg err';
+  }
+  // se o organizador editou os próprios palpites, atualiza a aba Palpites também
+  if(currentSlug && currentSlug === editingPlayerSlug){
+    myPicks = JSON.parse(JSON.stringify(editingPicks));
+    renderMatches();
+    renderMystrip();
+  }
+  renderLeaderboard();
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+document.getElementById('tabs').addEventListener('click', e=>{
+  const btn = e.target.closest('.tab-btn');
+  if(!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+  if(btn.dataset.tab==='classificacao') renderLeaderboard();
+});
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function escapeHtml(str){
+  if(str==null) return '';
+  return String(str).replace(/[&<>"']/g, c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+boot();
+</script>
+</body>
+</html>
