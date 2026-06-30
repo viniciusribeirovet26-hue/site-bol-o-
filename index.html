@@ -325,8 +325,28 @@ details[open] summary .arrow{transform:rotate(90deg);}
 }
 .points-badge.p5{background:var(--gold);color:#3a2200;}
 .points-badge.p3{background:var(--green);color:#06210f;}
+.points-badge.p2{background:var(--surface2);color:var(--green);border:1px solid var(--green);}
 .points-badge.p0{background:var(--surface2);color:var(--dim);}
 .tbd-note{color:var(--dim);font-size:.75rem;font-style:italic;}
+.advance-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  font-size:.75rem;
+  color:var(--dim);
+}
+.advance-row select{
+  flex:1;
+  min-width:150px;
+  background:#040d10;
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:8px 10px;
+  border-radius:6px;
+  font-family:'Inter',sans-serif;
+}
+.advance-row select:disabled{opacity:.35;}
 
 /* ---------- LEADERBOARD ---------- */
 .leaderboard-table{
@@ -506,11 +526,17 @@ footer{
 <div class="tabpanel" id="tab-regras">
   <div class="rules-card">
     <h3>Como funciona</h3>
-    <p>Cada participante dá um palpite de placar para os <span class="hl2">104 jogos</span> da Copa do Mundo 2026 (fase de grupos + mata-mata).</p>
+    <p>Na fase de grupos, cada participante dá um palpite de placar para cada jogo.</p>
     <ul>
       <li>Acertou apenas <span class="hl2">qual time vence</span> (ou que vai empatar) → <span class="hl2">3 pontos</span>.</li>
       <li>Acertou o <span class="hl">placar exato</span> do jogo → <span class="hl">5 pontos</span> (substitui os 3, não soma).</li>
       <li>Errou o resultado → 0 pontos.</li>
+    </ul>
+    <p>No <b>mata-mata</b>, o palpite tem duas partes: placar após 90 minutos e quem classifica.</p>
+    <ul>
+      <li>Placar exato nos 90 minutos → <span class="hl">5 pontos</span>.</li>
+      <li>Resultado correto nos 90 minutos, incluindo empate → <span class="hl2">3 pontos</span>.</li>
+      <li>Acertou quem avança → <span class="hl2">+2 pontos</span>.</li>
     </ul>
     <p>A pontuação de todos os jogos é somada automaticamente na aba <b>Classificação</b>. O <span class="hl">campeão do bolão</span> só é definido depois do jogo da <b>Final</b>, quando todos os 104 jogos já tiverem resultado.</p>
   </div>
@@ -827,13 +853,41 @@ function renderNamebar(){
    SCORING
    ============================================================ */
 function outcome(a,b){ if(a>b) return 'A'; if(b>a) return 'B'; return 'D'; }
-function calcPoints(pred, res){
+function advancingSide(res){
+  if(!res || res.a==null || res.b==null) return null;
+  if(res.a > res.b) return 'A';
+  if(res.b > res.a) return 'B';
+  return res.pen==='A' || res.pen==='B' ? res.pen : null;
+}
+function pointsBadgeHtml(pts){
+  if(pts==null) return '<span class="points-badge p0">Sem palpite</span>';
+  if(pts >= 5) return `<span class="points-badge p5">+${pts} pts ★</span>`;
+  if(pts === 3) return '<span class="points-badge p3">+3 pts</span>';
+  if(pts === 2) return '<span class="points-badge p2">+2 pts</span>';
+  return '<span class="points-badge p0">0 pts</span>';
+}
+function calcPoints(pred, res, match){
   if(!pred || res==null || res.a==null || res.b==null) return null;
-  if(pred.a==null || pred.b==null || pred.a==='' || pred.b==='') return null;
-  const pa = Number(pred.a), pb = Number(pred.b);
-  if(pa===res.a && pb===res.b) return 5;
-  if(outcome(pa,pb) === outcome(res.a,res.b)) return 3;
-  return 0;
+  const hasScore = !(pred.a==null || pred.b==null || pred.a==='' || pred.b==='');
+  const isKnockout = match && match.phase==='ko';
+  if(!hasScore && (!isKnockout || !pred.adv)) return null;
+
+  let scorePoints = 0;
+  if(hasScore){
+    const pa = Number(pred.a), pb = Number(pred.b);
+    if(pa===res.a && pb===res.b){
+      scorePoints = 5;
+    }else if(isKnockout){
+      scorePoints = outcome(pa,pb) === outcome(res.a,res.b) ? 3 : 0;
+    }else{
+      scorePoints = outcome(pa,pb) === outcome(res.a,res.b) ? 3 : 0;
+    }
+  }
+
+  if(!isKnockout) return scorePoints;
+  const adv = advancingSide(res);
+  const advPoints = pred.adv && adv && pred.adv === adv ? 2 : 0;
+  return scorePoints + advPoints;
 }
 
 /* ============================================================
@@ -888,9 +942,13 @@ function renderMatches(){
     const inputA = document.getElementById(`pick_${m.id}_a`);
     const inputB = document.getElementById(`pick_${m.id}_b`);
     if(!inputA || !inputB) return;
+    const advInput = document.getElementById(`pick_${m.id}_adv`);
     [inputA, inputB].forEach(inp=>{
-      inp.addEventListener('input', ()=> updateLocalPick(m.id, inputA.value, inputB.value));
+      inp.addEventListener('input', ()=> updateLocalPick(m, inputA.value, inputB.value, advInput ? advInput.value : null));
     });
+    if(advInput){
+      advInput.addEventListener('change', ()=> updateLocalPick(m, inputA.value, inputB.value, advInput.value));
+    }
   });
 
   const saveBtn = document.getElementById('savePicksBtn');
@@ -903,7 +961,7 @@ function matchCardHtml(m){
   const tbd = (m.phase==='ko') && (labelA==='A definir' || labelB==='A definir');
   const pick = myPicks[m.id] || {};
   const res = results[m.id];
-  const pts = calcPoints(pick, res);
+  const pts = calcPoints(pick, res, m);
 
   let footer = '';
   if(res && res.a!=null && res.b!=null){
@@ -912,16 +970,30 @@ function matchCardHtml(m){
       const winner = res.pen==='A' ? labelA : labelB;
       resultStr += ` (pên: ${escapeHtml(winner)})`;
     }
-    let badge = '<span class="points-badge p0">Sem palpite</span>';
-    if(pts===5) badge = '<span class="points-badge p5">+5 pts ★</span>';
-    else if(pts===3) badge = '<span class="points-badge p3">+3 pts</span>';
-    else if(pts===0) badge = '<span class="points-badge p0">0 pts</span>';
-    footer = `<div class="match-footer"><span>${resultStr}</span>${badge}</div>`;
+    if(m.phase==='ko'){
+      const adv = advancingSide(res);
+      if(adv){
+        const classified = adv==='A' ? labelA : labelB;
+        resultStr += ` · Classifica: ${escapeHtml(classified)}`;
+      }
+    }
+    footer = `<div class="match-footer"><span>${resultStr}</span>${pointsBadgeHtml(pts)}</div>`;
   }else if(tbd){
     footer = `<div class="match-footer"><span class="tbd-note">Aguardando definição dos times</span></div>`;
   }else{
     footer = `<div class="match-footer"><span>Aguardando o jogo</span></div>`;
   }
+
+  const advancePicker = m.phase==='ko' ? `
+      <div class="advance-row">
+        <span>Classifica:</span>
+        <select id="pick_${m.id}_adv" ${tbd?'disabled':''} aria-label="Quem classifica em ${escapeHtml(m.stageLabel)}">
+          <option value="">Selecione</option>
+          <option value="A" ${pick.adv==='A'?'selected':''}>${escapeHtml(labelA)}</option>
+          <option value="B" ${pick.adv==='B'?'selected':''}>${escapeHtml(labelB)}</option>
+        </select>
+      </div>` : '';
+
 
   return `
     <div class="match-card">
@@ -935,15 +1007,18 @@ function matchCardHtml(m){
           value="${pick.b!=null?pick.b:''}" ${tbd?'disabled':''} aria-label="Placar ${escapeHtml(labelB)}">
         <div class="team-name ${labelB==='A definir'?'tbd':''}" style="text-align:right">${escapeHtml(labelB)}</div>
       </div>
+      ${advancePicker}
       ${footer}
     </div>`;
 }
 
-function updateLocalPick(matchId, a, b){
-  myPicks[matchId] = {
+function updateLocalPick(m, a, b, adv){
+  const pick = {
     a: a===''?null:Number(a),
     b: b===''?null:Number(b),
   };
+  if(m.phase==='ko') pick.adv = adv || null;
+  myPicks[m.id] = pick;
   const msg = document.getElementById('picksSaveMsg');
   if(msg){ msg.textContent = 'Alterações não salvas — clique em Salvar'; msg.className='save-msg'; }
 }
@@ -975,7 +1050,7 @@ function renderMystrip(){
     const res = results[m.id];
     if(!res || res.a==null) return;
     played++;
-    const pts = calcPoints(myPicks[m.id], res);
+    const pts = calcPoints(myPicks[m.id], res, m);
     if(pts!=null){
       total += pts;
       if(pts===5){exact++; hits++;}
@@ -1011,7 +1086,7 @@ async function renderLeaderboard(){
     MATCHES.forEach(m=>{
       const res = results[m.id];
       if(!res || res.a==null) return;
-      const pts = calcPoints(picks[m.id], res);
+      const pts = calcPoints(picks[m.id], res, m);
       if(pts!=null){
         total += pts;
         if(pts===5){exact++; hits++;}
@@ -1275,14 +1350,19 @@ function renderPlayerPicksEditor(){
     const ia = document.getElementById(`apick_${m.id}_a`);
     const ib = document.getElementById(`apick_${m.id}_b`);
     if(!ia||!ib) return;
-    [ia,ib].forEach(inp=> inp.addEventListener('input', ()=>{
-      editingPicks[m.id] = {
+    const adv = document.getElementById(`apick_${m.id}_adv`);
+    const syncPick = ()=>{
+      const pick = {
         a: ia.value===''?null:Number(ia.value),
         b: ib.value===''?null:Number(ib.value),
       };
+      if(m.phase==='ko') pick.adv = adv ? (adv.value || null) : null;
+      editingPicks[m.id] = pick;
       const msg = document.getElementById('playerPicksSaveMsg');
       if(msg){ msg.textContent = 'Alterações não salvas — clique em Salvar'; msg.className = 'save-msg'; }
-    }));
+    };
+    [ia,ib].forEach(inp=> inp.addEventListener('input', syncPick));
+    if(adv) adv.addEventListener('change', syncPick);
   });
 
   const saveBtn = document.getElementById('savePlayerPicksBtn');
@@ -1295,17 +1375,32 @@ function playerPickCardHtml(m){
   const tbd = (m.phase==='ko') && (labelA==='A definir' || labelB==='A definir');
   const pick = editingPicks[m.id] || {};
   const res = results[m.id];
-  const pts = calcPoints(pick, res);
+  const pts = calcPoints(pick, res, m);
 
   let badge = '';
   if(res && res.a!=null && res.b!=null){
-    if(pts===5) badge = '<span class="points-badge p5">+5 pts ★</span>';
-    else if(pts===3) badge = '<span class="points-badge p3">+3 pts</span>';
-    else if(pts===0) badge = '<span class="points-badge p0">0 pts</span>';
-    badge = `<div class="match-footer"><span>Resultado: ${res.a} x ${res.b}</span>${badge}</div>`;
+    let resultStr = `Resultado: ${res.a} x ${res.b}`;
+    if(m.phase==='ko'){
+      const adv = advancingSide(res);
+      if(adv){
+        const classified = adv==='A' ? labelA : labelB;
+        resultStr += ` · Classifica: ${escapeHtml(classified)}`;
+      }
+    }
+    badge = `<div class="match-footer"><span>${resultStr}</span>${pointsBadgeHtml(pts)}</div>`;
   }else if(tbd){
     badge = `<div class="match-footer"><span class="tbd-note">Aguardando definição dos times</span></div>`;
   }
+
+  const advancePicker = m.phase==='ko' ? `
+      <div class="advance-row">
+        <span>Classifica:</span>
+        <select id="apick_${m.id}_adv" ${tbd?'disabled':''} aria-label="Quem classifica em ${escapeHtml(m.stageLabel)}">
+          <option value="">Selecione</option>
+          <option value="A" ${pick.adv==='A'?'selected':''}>${escapeHtml(labelA)}</option>
+          <option value="B" ${pick.adv==='B'?'selected':''}>${escapeHtml(labelB)}</option>
+        </select>
+      </div>` : '';
 
   return `
     <div class="match-card">
@@ -1319,6 +1414,7 @@ function playerPickCardHtml(m){
           value="${pick.b!=null?pick.b:''}" ${tbd?'disabled':''} aria-label="Placar ${escapeHtml(labelB)}">
         <div class="team-name ${labelB==='A definir'?'tbd':''}" style="text-align:right">${escapeHtml(labelB)}</div>
       </div>
+      ${advancePicker}
       ${badge}
     </div>`;
 }
