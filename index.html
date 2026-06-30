@@ -105,6 +105,18 @@ body{
   box-shadow:0 8px 24px rgba(255,197,61,.25);
 }
 .champion-banner div{margin-top:4px;}
+.update-note{
+  max-width:760px;
+  margin:18px auto 0;
+  background:rgba(47,191,113,.08);
+  border:1px solid var(--line);
+  color:var(--dim);
+  border-radius:12px;
+  padding:12px 16px;
+  text-align:center;
+  font-size:.88rem;
+}
+.update-note b{color:var(--gold);}
 
 /* ---------- NAME BAR ---------- */
 .namebar{
@@ -465,6 +477,7 @@ footer{
 </div>
 
 <div class="champion-wrap" id="championWrap"></div>
+<div class="update-note"><b>Atualizado em 30/06/2026:</b> Fase de 32 preenchida com jogos, horários e resultados já divulgados.</div>
 
 <div class="namebar">
   <div class="namebar-inner" id="namebarInner"></div>
@@ -538,7 +551,24 @@ const TEAMS = {
 const ROUND_PAIRS = [[[0,1],[2,3]],[[0,2],[1,3]],[[0,3],[1,2]]];
 
 const KO_STAGES = [
-  {key:'R32', label:'Fase de 32 (16-avos de final)', count:16},
+  {key:'R32', label:'Fase de 32 (16-avos de final)', matches:[
+    {a:'Canadá', b:'África do Sul', note:'28/06'},
+    {a:'Brasil', b:'Japão', note:'29/06'},
+    {a:'Paraguai', b:'Alemanha', note:'29/06'},
+    {a:'Marrocos', b:'Holanda', note:'29/06'},
+    {a:'Costa do Marfim', b:'Noruega', note:'30/06 - 13h ET'},
+    {a:'França', b:'Suécia', note:'30/06 - 17h ET'},
+    {a:'México', b:'Equador', note:'30/06 - 21h ET'},
+    {a:'Inglaterra', b:'RD Congo', note:'01/07 - 12h ET'},
+    {a:'Bélgica', b:'Senegal', note:'01/07 - 16h ET'},
+    {a:'Estados Unidos', b:'Bósnia e Herzegovina', note:'01/07 - 20h ET'},
+    {a:'Espanha', b:'Áustria', note:'02/07 - 15h ET'},
+    {a:'Portugal', b:'Croácia', note:'02/07 - 19h ET'},
+    {a:'Suíça', b:'Argélia', note:'02/07 - 23h ET'},
+    {a:'Austrália', b:'Egito', note:'03/07 - 14h ET'},
+    {a:'Argentina', b:'Cabo Verde', note:'03/07 - 18h ET'},
+    {a:'Colômbia', b:'Gana', note:'03/07 - 21h30 ET'},
+  ]},
   {key:'R16', label:'Oitavas de Final', count:8},
   {key:'QF',  label:'Quartas de Final', count:4},
   {key:'SF',  label:'Semifinais', count:2},
@@ -564,14 +594,16 @@ function buildMatches(){
     });
   });
   KO_STAGES.forEach(stage=>{
-    for(let i=1;i<=stage.count;i++){
+    const count = stage.matches ? stage.matches.length : stage.count;
+    for(let i=1;i<=count;i++){
+      const preset = stage.matches ? stage.matches[i-1] : {};
       matches.push({
-        id: stage.count===1 ? stage.key : `${stage.key}_${i}`,
+        id: count===1 ? stage.key : `${stage.key}_${i}`,
         phase:'ko',
         group:stage.key,
-        stageLabel: stage.count===1 ? stage.label : `${stage.label} ${i}`,
-        a:null,
-        b:null,
+        stageLabel: preset.note ? `${stage.label} ${i} · ${preset.note}` : (count===1 ? stage.label : `${stage.label} ${i}`),
+        a:preset.a || null,
+        b:preset.b || null,
       });
     }
   });
@@ -580,6 +612,12 @@ function buildMatches(){
 const MATCHES = buildMatches();
 const MATCH_BY_ID = {};
 MATCHES.forEach(m=>MATCH_BY_ID[m.id]=m);
+const DEFAULT_RESULTS = {
+  R32_1: {a:1, b:0},
+  R32_2: {a:2, b:1},
+  R32_3: {a:1, b:1, pen:'A'},
+  R32_4: {a:1, b:1, pen:'A'},
+};
 
 const PLAYERS = [
   'Davi',
@@ -711,7 +749,7 @@ const tabPalpites = document.getElementById('tab-palpites');
    BOOT
    ============================================================ */
 async function boot(){
-  results = (await storeGet('results', true)) || {};
+  results = {...DEFAULT_RESULTS, ...((await storeGet('results', true)) || {})};
   bracketTeams = (await storeGet('bracket_teams', true)) || {};
 
   const savedName = await storeGet('my_name', false);
